@@ -8,14 +8,13 @@ import java.util.List;
 
 public class ModelParallel implements Serializable {
 
-    private static final long serialVersionUID = 1L; // 推荐加上序列号
+    private static final long serialVersionUID = 1L;
     private final List<DenseLayer> layers;
 
     public ModelParallel(List<DenseLayer> layers) {
         this.layers = layers;
     }
 
-    // 模拟 Forward 全流程（Pipeline Parallel）
     public Tensor forward(Tensor input) {
         Tensor x = input;
         for (int i = 0; i < layers.size(); i++) {
@@ -26,7 +25,6 @@ public class ModelParallel implements Serializable {
         return x;
     }
 
-    // 模拟 Backward 全流程（Pipeline Parallel）
     public Tensor backward(Tensor gradOutput) {
         Tensor grad = gradOutput;
         for (int i = layers.size() - 1; i >= 0; i--) {
@@ -37,7 +35,7 @@ public class ModelParallel implements Serializable {
         return grad;
     }
 
-    // 模拟某个 stage 的 forward，仅适用于 PP 流水线并行调度
+    //  stage 的 forward，仅适用于 PP 流水线并行调度
     public Tensor forwardStage(int stageId, Tensor input) {
         if (stageId < 0 || stageId >= layers.size()) {
             throw new IllegalArgumentException("Invalid stageId");
@@ -48,7 +46,7 @@ public class ModelParallel implements Serializable {
         return output;
     }
 
-    // 模拟某个 stage 的 backward
+    //  stage 的 backward
     public Tensor backwardStage(int stageId, Tensor gradOutput) {
         if (stageId < 0 || stageId >= layers.size()) {
             throw new IllegalArgumentException("Invalid stageId");
@@ -59,9 +57,8 @@ public class ModelParallel implements Serializable {
         return grad;
     }
 
-    // 模拟 Tensor Parallel 的梯度同步（例如多 GPU 的 NCCL AllReduce）
+    //  Tensor Parallel 的梯度同步（例如多 GPU 的 NCCL AllReduce）
     private void simulateTensorParallelSync(int stageId) {
         System.out.println("[TP] Simulating tensor/gradient sync at stage " + stageId);
-        // 实际情况：在这里可接入 NCCL、Spark 或 RPC 通信逻辑
     }
 }

@@ -3,6 +3,11 @@ package autograd;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.broadcast.Broadcast;
+
 import java.util.Random;
 import java.io.Serializable;
 
@@ -183,4 +188,18 @@ public class Tensor implements Serializable{
         }
         return new Tensor(data);
     }
+    private JavaSparkContext sc;
+    // 假设传入当前stage所有Tensor的RDD
+    public Tensor synchronizeTensorParallel(JavaRDD<Tensor> tensorRDD) {
+        // 1. 利用RDD的reduce操作实现AllReduce求和
+        Tensor sumTensor = tensorRDD.reduce((t1, t2) -> t1.add(t2));
+
+        // 2. 广播同步后的Tensor，方便所有节点使用
+        Broadcast<Tensor> broadcastTensor = sc.broadcast(sumTensor);
+
+        // 3. 返回广播的Tensor（一般调用端可以直接用这个结果）
+        return broadcastTensor.getValue();
+    }
+
+
 }

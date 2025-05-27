@@ -12,7 +12,7 @@ public class Main {
         SparkConf conf = new SparkConf().setAppName("SparkModelParallelTest").setMaster("local[*]");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
-        // 模拟输入数据（只有一条样本）
+        // 输入数据
         List<Tensor> inputList = Collections.singletonList(Tensor.rand(1, 784)); // MNIST
         JavaRDD<Tensor> inputRDD = sc.parallelize(inputList, 3); // 3个Stage的并行
 
@@ -29,7 +29,7 @@ public class Main {
             List<Tensor> outputs = new ArrayList<>();
             while (iterator.hasNext()) {
                 Tensor input = iterator.next();
-                Tensor output = mp.forwardStage(stageId, input); // 模拟某一层前向
+                Tensor output = mp.forwardStage(stageId, input); 
                 outputs.add(output);
             }
             return outputs.iterator();

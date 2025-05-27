@@ -9,7 +9,6 @@ import java.util.List;
 public class ParallelTest {
 
     public static void main(String[] args) {
-        // 先准备一批层
         DenseLayer layer1 = new DenseLayer(2, 3);
         DenseLayer layer2 = new DenseLayer(3, 2);
         List<DenseLayer> layers = new ArrayList<>();
