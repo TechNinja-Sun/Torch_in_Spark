@@ -1,7 +1,3 @@
-以下是为 GitHub 项目 [Torch\_in\_Spark](https://github.com/TechNinja-Sun/Torch_in_Spark) 编写的详细 README.md 文件，涵盖了每个 Java 文件的功能说明。
-
----
-
 # Torch\_in\_Spark
 
 `Torch_in_Spark` 是一个模拟 PyTorch 分布式训练机制的 Java 项目，基于 Apache Spark 实现。该项目旨在探索在 Spark 环境中实现自动微分、模型并行、数据并行等深度学习核心功能的可能性。它提供了一个轻量级的框架，用于在分布式环境中训练简单的神经网络模型。
